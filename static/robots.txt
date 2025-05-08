@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://searchofeeds.com/sitemap.xml

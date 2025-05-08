@@ -1,0 +1,63 @@
+$color1: #a70014;
+$font1: #41414c;
+$font2: #ffffff;
+
+@function vw($size) {
+  @return calc($size/750) * 100vw;
+}
+
+@function vw2($size) {
+  @return calc($size/1024) * 100vw;
+}
+
+@mixin icon($w, $h, $url) {
+  display: inline-block;
+  width: $w;
+  height: $h;
+  background-image: url("~/assets/images/" + $url);
+  background-size: 100% 100%;
+}
+
+@mixin bg($url) {
+  background-image: url("~/assets/images/" + $url);
+  background-size: 100% 100%;
+}
+
+@mixin btn-img($width, $height, $url) {
+  width: $width;
+  height: $height;
+  cursor: pointer;
+  background-image: url("~/assets/images/" + $url);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  @include center;
+}
+
+@mixin ellipsis($lineCount: 1) {
+  @if $lineCount == 1 {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  } @else {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: $lineCount;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+  }
+}
+
+@mixin center() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin scroll() {
+  overflow-x: auto;
+  overflow-y: hidden;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

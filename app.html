@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head {{ HEAD_ATTRS }}>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    {{ HEAD }}
+    <script async="async" src="https://www.google.com/adsense/search/ads.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      (function (g, o) {
+        (g[o] =
+          g[o] ||
+          function () {
+            (g[o]["q"] = g[o]["q"] || []).push(arguments);
+          }),
+          (g[o]["t"] = 1 * new Date());
+      })(window, "_googCsa");
+    </script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3BPZNSBTDE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-3BPZNSBTDE");
+    </script>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-WVMPWZRF");
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <script>
+      window.addEventListener("load", function () {
+        if ("serviceWorker" in window.navigator) {
+          window.navigator.serviceWorker
+            .register("/sw.js")
+            .then(() => {})
+            .catch(() => {});
+        }
+        window.addEventListener("beforeinstallprompt", (e) => {
+          e.preventDefault();
+          window.deferredPrompt = e;
+        });
+      });
+    </script>
+  </head>
+  <body {{ BODY_ATTRS }} tabindex="0">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-WVMPWZRF"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    {{ APP }}
+    <script src="/runtimer.js"></script>
+  </body>
+</html>

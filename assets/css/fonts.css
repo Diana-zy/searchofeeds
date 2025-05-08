@@ -1,0 +1,15 @@
+@font-face {
+  font-family: "rs";
+  src: url("~assets/fonts/rsl.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "rsb";
+  src: url("~assets/fonts/rsb.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "rssb";
+  src: url("~assets/fonts/rssb.woff2") format("woff2");
+  font-display: swap;
+}
