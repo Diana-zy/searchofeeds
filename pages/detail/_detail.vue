@@ -144,7 +144,7 @@ export default {
     }
 
     setTimeout(() => {
-      if (window.location.hostname.includes("s.")) {
+      if (window.location.hostname.indexOf("s.") === 0) {
         this.addAdSenseScript2();
       } else {
         this.addAdSenseScript();

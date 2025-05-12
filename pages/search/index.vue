@@ -39,7 +39,7 @@ export default {
     };
   },
   mounted() {
-    window.location.hostname.includes("s.") && (this.subdomain = true);
+    window.location.hostname.indexOf("s.") === 0 && (this.subdomain = true);
     this.hide = false;
 
     this.input = this.$route.query.query || "";
