@@ -186,7 +186,7 @@ export default {
   height: 32px;
   background: rgba(167, 0, 20, 0.2);
   border-radius: 50%;
-  left: 165px;
+  left: 265px;
   @include center;
   color: $font2;
 }
