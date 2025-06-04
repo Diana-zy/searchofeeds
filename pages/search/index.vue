@@ -110,7 +110,12 @@ export default {
         adLoadedCallback: (loaded, e) => {
           if (e) {
             // eslint-disable-next-line no-undef
-            dataLayer.push({ event: "C_AR" });
+            dataLayer.push({
+              event: "C_AR",
+              hi_country: window.youknowwho_ip_country || "unknown",
+              hi_ip: window.youknowwho_ip || "unknown",
+              hi_ttclid: window.getCookie("ttclid") || "unknown"
+            });
             if (window.getDetailIsClickAc()) {
               window.dataLayer.push({
                 event: "C_AR_C"

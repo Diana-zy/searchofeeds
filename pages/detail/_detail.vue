@@ -5,10 +5,6 @@
       <h1 class="article-title">{{ newInfo.name }}</h1>
       <div class="news-detail">{{ newInfo.first_paragraph }}</div>
       <div id="relatedsearches1"> </div>
-      <!-- <google-ad-preload class="google-ad-preload" ad-slot="7583463276" /> -->
-      <!-- <div class="read-more" :class="{ hide: readMore }" @click="readMore = true">
-        {{ readMoreText[newInfo.language] }}
-      </div> -->
       <NuxtImg
         format="auto"
         fit="cover"
@@ -16,12 +12,10 @@
         :src="newInfo.cover"
         :alt="newInfo.name"
         class="article-img"
-        :class="{ show: readMore }"
         preload
       />
-      <!-- <ArticleWithAds :class="{ show: readMore }" :content="newInfo.content" :char-interval="800" /> -->
       <!-- eslint-disable vue/no-v-html -->
-      <div class="news-detail" :class="{ show: readMore }" v-html="newInfo.content"></div>
+      <div class="news-detail" v-html="newInfo.content"></div>
       <!--eslint-enable-->
     </article>
     <div id="relatedstyle2"> </div>
@@ -50,22 +44,7 @@ export default {
   },
   data() {
     return {
-      channelId: "",
-      readMore: true,
-      // showDesc: false,
-      readMoreText: {
-        en: "Read More>>",
-        ja: "続きを読む>>",
-        ko: "더 읽기>>",
-        zh_TW: "閱讀更多>>",
-        de: "Weiterlesen>>",
-        pt: "Leia Mais>>", // 葡萄牙语
-        es: "Leer Más>>", // 西班牙语
-        fr: "Lire la suite>>", // 法语
-        th: "อ่านเพิ่มเติม>>", // 泰语
-        id: "Baca Selengkapnya>>" // 印度尼西亚语
-      }
-      // detailKeyword: []
+      channelId: ""
     };
   },
   head() {
