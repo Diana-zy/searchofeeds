@@ -1,110 +1,57 @@
 <template>
   <div class="page">
-    <Header :lang="newInfo.language" />
-    <article class="article">
-      <h1 class="article-title">{{ newInfo.name }}</h1>
-      <div class="news-detail">{{ newInfo.first_paragraph }}</div>
-      <div id="relatedsearches1"> </div>
-      <NuxtImg
-        format="auto"
-        fit="cover"
-        width="900"
-        :src="newInfo.cover"
-        :alt="newInfo.name"
-        class="article-img"
-        preload
-      />
-      <!-- eslint-disable vue/no-v-html -->
-      <div class="news-detail" v-html="newInfo.content"></div>
-      <!--eslint-enable-->
-    </article>
-    <div id="relatedstyle2"> </div>
-    <Footer :lang="newInfo.language" />
+    <Header :lang="newInfo?.language" />
+    <template v-if="newInfo">
+      <article class="article">
+        <h1 class="article-title">{{ newInfo.name }}</h1>
+        <div class="news-detail">{{ newInfo.first_paragraph }}</div>
+        <div id="relatedsearches1"> </div>
+        <NuxtImg
+          format="auto"
+          fit="cover"
+          width="900"
+          :src="newInfo.cover"
+          :alt="newInfo.name"
+          class="article-img"
+          preload
+        />
+        <!-- eslint-disable vue/no-v-html -->
+        <div class="news-detail" v-html="newInfo.content"></div>
+        <!--eslint-enable-->
+      </article>
+      <div id="relatedstyle2"> </div>
+      <Footer :lang="newInfo.language" />
+    </template>
   </div>
 </template>
 
 <script>
 export default {
-  async asyncData({ $axios, params, env }) {
-    const path = params.detail;
-    const lastDashIndex = path.lastIndexOf("-");
-    const id = path.substring(lastDashIndex + 1, path.length);
-    const [data] = await Promise.all([
-      $axios.$get("/api/article/detail", {
-        params: {
-          site_id: env.SITE_ID,
-          article_id: id
-        }
-      })
-    ]);
-    data.content = data.content.replace(/<\/h4><p><br><br>|<br><br><\/p><h4>/g, (match) => {
-      return match.includes("</h4><p>") ? "</h4><p>" : "</p><h4>";
-    });
-    return { newInfo: data };
-  },
+  // async asyncData({ $axios, params, env }) {
+  //   const path = params.detail;
+  //   const lastDashIndex = path.lastIndexOf("-");
+  //   const id = path.substring(lastDashIndex + 1, path.length);
+  //   const [data] = await Promise.all([
+  //     $axios.$get("/api/article/detail", {
+  //       params: {
+  //         site_id: env.SITE_ID,
+  //         article_id: id
+  //       }
+  //     })
+  //   ]);
+  //   data.content = data.content.replace(/<\/h4><p><br><br>|<br><br><\/p><h4>/g, (match) => {
+  //     return match.includes("</h4><p>") ? "</h4><p>" : "</p><h4>";
+  //   });
+  //   return { newInfo: data };
+  // },
   data() {
     return {
+      newInfo: null,
       channelId: ""
     };
   },
-  head() {
-    return {
-      htmlAttrs: {
-        lang: this.newInfo.language
-      },
-      title: this.newInfo.name + " - Searchofeeds",
-      meta: [
-        {
-          hid: "description",
-          name: "description",
-          content: this.newInfo.first_paragraph
-        },
-        {
-          hid: "keywords",
-          name: "keywords",
-          content: this.newInfo.terms
-        },
-        {
-          hid: "og:title",
-          property: "og:title",
-          content: this.newInfo.name
-        },
-        {
-          hid: "og:description",
-          property: "og:description",
-          content: this.newInfo.first_paragraph
-        },
-        {
-          hid: "og:url",
-          property: "og:url",
-          content: `https://searchofeeds.com/detail/${this.newInfo.path}/`
-        },
-        {
-          hid: "og:locale",
-          property: "og:locale",
-          content: this.newInfo.language
-        },
-        {
-          hid: "og:image",
-          property: "og:image",
-          content: this.newInfo.cover
-        },
-        {
-          hid: "og:type",
-          property: "og:type",
-          content: "article"
-        }
-      ]
-    };
-  },
-  // beforeMount() {
-  //   if (this.newInfo.recommend_words && this.$recKeywords.length > 0) {
-  //     this.detailKeyword = this.newInfo.recommend_words;
-  //   } else {
-  //     this.detailKeyword = this.$recKeywords;
-  //   }
-  // },
-  mounted: function () {
+  mounted: async function () {
+    await this.getDetailInfo();
     // 获取 URL 查询参数
     const searchParams = new URLSearchParams(window.location.search);
     // AdSense 配置参数
@@ -200,7 +147,7 @@ export default {
         }`,
         resultsPageQueryParam: "query",
         terms: terms || this.newInfo.terms,
-        referrerAdCreative:terms || this.newInfo.referrer_ad_creative,
+        referrerAdCreative: terms || this.newInfo.referrer_ad_creative,
         ivt: false,
         adtest: "off"
       };
@@ -304,6 +251,19 @@ export default {
           }
         }
       });
+    },
+    async getDetailInfo() {
+      const aid = this.$route.query.aid;
+      const data = await this.$axios.$get("/api/article/detail", {
+        params: {
+          site_id: process.env.SITE_ID,
+          article_id: aid
+        }
+      });
+      data.content = data.content.replace(/<\/h4><p><br><br>|<br><br><\/p><h4>/g, (match) => {
+        return match.includes("</h4><p>") ? "</h4><p>" : "</p><h4>";
+      });
+      this.newInfo = data;
     }
   }
 };
