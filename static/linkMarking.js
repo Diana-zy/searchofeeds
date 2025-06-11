@@ -51,3 +51,15 @@ window.addEventListener("blur", () => {
     }
   }
 });
+
+// eslint-disable-next-line no-unused-vars
+function pushEventParamsToGtm(eventName) {
+  const searchParams = new URLSearchParams(window.location.search);
+  const ttclid = searchParams.get("ttclid");
+  window.dataLayer.push({
+    event: eventName,
+    hi_country: window.youknowwho_ip_country || "unknown",
+    hi_ip: window.youknowwho_ip || "unknown",
+    hi_ttclid: ttclid || window.getCookie("hi_ttclid") || "unknown"
+  });
+}

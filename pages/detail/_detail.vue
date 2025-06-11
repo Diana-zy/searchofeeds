@@ -200,7 +200,7 @@ export default {
         }`,
         resultsPageQueryParam: "query",
         terms: terms || this.newInfo.terms,
-        referrerAdCreative:terms || this.newInfo.referrer_ad_creative,
+        referrerAdCreative: terms || this.newInfo.referrer_ad_creative,
         ivt: false,
         adtest: "off"
       };
@@ -213,7 +213,7 @@ export default {
           console.log("adLoadedCallback", loaded, response, isExperimentVariant, callbackOptions);
           if (response) {
             // eslint-disable-next-line no-undef
-            dataLayer.push({ event: "C_AC" }); // 事件推送到 dataLayer
+            window.pushEventParamsToGtm("C_AC");
             try {
               let numberOfKeys = 0;
               let concatenatedKeys = "miss";

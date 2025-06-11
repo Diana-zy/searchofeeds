@@ -4,10 +4,24 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     {{ HEAD }}
+    <script src="/linkMarking.js"></script>
     <script>
-      const script = document.createElement('script');
-      script.src = 'https://wc.bunchthings.com/youknowwho.js?'+Date.now()
+      const searchParams = new URLSearchParams(window.location.search);
+      const ttclid = searchParams.get("ttclid");
+      if (ttclid) {
+        window.setCookie("hi_ttclid", ttclid);
+      }
+      const script = document.createElement("script");
+      script.src = "https://wc.bunchthings.com/youknowwho.js?" + Date.now();
       document.head.appendChild(script);
+      script.onload = function () {
+        const pathname = window.location.pathname;
+        if (pathname.startsWith("/detail")) {
+          window.pushEventParamsToGtm("D_PV");
+        } else if (pathname.startsWith("/search/")) {
+          window.pushEventParamsToGtm("S_PV");
+        }
+      };
     </script>
     <script async="async" src="https://www.google.com/adsense/search/ads.js"></script>
     <script type="text/javascript" charset="utf-8">
@@ -74,7 +88,6 @@
     ></noscript>
     <!-- End Google Tag Manager (noscript) -->
     {{ APP }}
-    <script src="/linkMarking.js"></script>
     <script>
       window.pageLoadTime = performance.now();
       window.arFlag = false;
@@ -90,12 +103,7 @@
 
           if (src.includes("afs/ads?")) {
             if (activeElement.getAttribute("title")) {
-              dataLayer.push({
-                event: "T_AR",
-                hi_country: window.youknowwho_ip_country || "unknown",
-                hi_ip: window.youknowwho_ip || "unknown",
-                hi_ttclid: window.getCookie("ttclid") || "unknown"
-              });
+              window.pushEventParamsToGtm("T_AR");
               window.arFlag = true;
 
               if (window.navigator.webdriver) {
@@ -116,7 +124,7 @@
                 dataLayer.push({ event: "AR_0" });
               }
             } else {
-              eventName = "T_AC";
+              window.pushEventParamsToGtm("T_AC");
             }
           } else if (src.includes("afs/ads/i/")) {
             eventName = "T_AG";
