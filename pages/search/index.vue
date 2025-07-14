@@ -39,6 +39,14 @@ export default {
     };
   },
   mounted() {
+    if (
+      !window.getCookie("first") &&
+      window.getCookie("mounted") &&
+      window.getCookie("query_ad") &&
+      window.getCookie("click_ad")
+    ) {
+      window.setCookie("first", 3, 1);
+    }
     if (window.getDetailIsClickAc()) {
       window.dataLayer.push({
         event: "S_PL"
@@ -55,7 +63,20 @@ export default {
   methods: {
     addAdSense() {
       setTimeout(() => {
-        this.addAdSenseScript();
+        console.log("this.$route.query", this.$route.query);
+        if (this.$route.query.from.includes("detail")) {
+          const buffer = window.getCookie("first");
+          if (buffer && buffer !== "ok") {
+            this.addAdSenseScript();
+            if (Number(buffer) > 1) {
+              window.setCookie("first", Number(buffer) - 1, 1);
+            } else {
+              window.setCookie("first", "ok", 1);
+            }
+          }
+        } else if (this.$route.query.from.includes("content")) {
+          this.addAdSenseScript();
+        }
       }, 0);
     },
     async searchNews() {
