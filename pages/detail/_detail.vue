@@ -134,7 +134,7 @@ export default {
       }
       const ignoredPageParams = paramKeys.join(",");
 
-      let adSenseConfig = {
+      const adSenseConfig = {
         channel: this.channelId,
         pubId: "partner-pub-1853000876464912",
         styleId: "3911226554",
@@ -150,23 +150,6 @@ export default {
         ivt: false,
         adtest: "off"
       };
-      if (window.location.hostname.indexOf("s.") === 0) {
-        adSenseConfig = {
-          channel: this.channelId,
-          pubId: "partner-pub-1853000876464912",
-          styleId: "3911226554",
-          adsafe: "low",
-          ignoredPageParams,
-          relatedSearchTargeting: "query",
-          query: terms ? terms.split(",")[0] : this.newInfo.terms.split(",")[0],
-          ivt: false,
-          resultsPageBaseUrl: `${window.location.origin}/search/?afs&from=detail&channel=${
-            this.channelId
-          }${clickId && `&click_id=${clickId}`}`,
-          resultsPageQueryParam: "query"
-        };
-      }
-      // 初始化 _googCsa 并加载相关搜索广告
       // eslint-disable-next-line no-undef
       _googCsa("relatedsearch", adSenseConfig, {
         container: "relatedsearches1", // 广告容器 ID
@@ -174,7 +157,12 @@ export default {
         adLoadedCallback: function (loaded, response, isExperimentVariant, callbackOptions) {
           console.log("adLoadedCallback", loaded, response, isExperimentVariant, callbackOptions);
           if (response) {
-            // eslint-disable-next-line no-undef
+            if (window?.ttq?.track) {
+              window.ttq?.track?.("Lead");
+            } else {
+              window.taskList = window.taskList || [];
+              window.taskList.push("Lead");
+            }
             window.pushEventParamsToGtm("C_AC");
             window.setCookie("query_ad", 1);
             try {

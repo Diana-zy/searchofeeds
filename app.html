@@ -4,6 +4,75 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     {{ HEAD }}
+    <!-- TikTok Pixel Code Start -->
+    <script>
+      window.taskList = window.taskList || [];
+      !(function (w, d, t) {
+        w.TiktokAnalyticsObject = t;
+        var ttq = (w[t] = w[t] || []);
+        (ttq.methods = [
+          "page",
+          "track",
+          "identify",
+          "instances",
+          "debug",
+          "on",
+          "off",
+          "once",
+          "ready",
+          "alias",
+          "group",
+          "enableCookie",
+          "disableCookie",
+          "holdConsent",
+          "revokeConsent",
+          "grantConsent"
+        ]),
+          (ttq.setAndDefer = function (t, e) {
+            t[e] = function () {
+              t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+            };
+          });
+        for (var i = 0; i < ttq.methods.length; i++) ttq.setAndDefer(ttq, ttq.methods[i]);
+        (ttq.instance = function (t) {
+          for (var e = ttq._i[t] || [], n = 0; n < ttq.methods.length; n++)
+            ttq.setAndDefer(e, ttq.methods[n]);
+          return e;
+        }),
+          (ttq.load = function (e, n) {
+            var r = "https://analytics.tiktok.com/i18n/pixel/events.js",
+              o = n && n.partner;
+            (ttq._i = ttq._i || {}),
+              (ttq._i[e] = []),
+              (ttq._i[e]._u = r),
+              (ttq._t = ttq._t || {}),
+              (ttq._t[e] = +new Date()),
+              (ttq._o = ttq._o || {}),
+              (ttq._o[e] = n || {});
+            n = document.createElement("script");
+            (n.type = "text/javascript"), (n.async = !0), (n.src = r + "?sdkid=" + e + "&lib=" + t);
+            e = document.getElementsByTagName("script")[0];
+            e.parentNode.insertBefore(n, e);
+          });
+
+        ttq.load("D1QC01BC77U2K3H7LBM0");
+        if (w.location.pathname.startsWith("/detail")) {
+          ttq.page(); //Pageview
+        }
+        if (window?.taskList?.length) {
+          let buffer = window.taskList;
+          buffer.forEach((item) => {
+            try {
+              ttq.track(item);
+            } catch (error) {
+              console.log(error);
+            }
+          });
+          window.taskList = [];
+        }
+      })(window, document, "ttq");
+    </script>
+    <!-- TikTok Pixel Code End -->
     <script src="/linkMarking.js"></script>
     <script>
       const searchParams = new URLSearchParams(window.location.search);
@@ -114,9 +183,9 @@
     {{ APP }}
     <script>
       window.pageLoadTime = performance.now();
-      window.arFlag = false;
       window.isUnloaded = false;
       window.done = false;
+      window.done1 = false;
 
       window.addEventListener("beforeunload", () => {
         if (!window.done) {
@@ -127,8 +196,13 @@
 
           if (src.includes("afs/ads?")) {
             if (activeElement.getAttribute("title")) {
+              if (window?.ttq?.track) {
+                window.ttq?.track?.("Purchase");
+              } else {
+                window.taskList = window.taskList || [];
+                window.taskList.push("Purchase");
+              }
               window.pushEventParamsToGtm("T_AR");
-              window.arFlag = true;
 
               if (window.navigator.webdriver) {
                 dataLayer.push({ event: "AR_DRIVER" });
@@ -183,32 +257,43 @@
         if (document.visibilityState === "visible") {
           setTimeout(() => {
             window.done = false;
+            window.done1 = false;
             window.pageLoadTime = performance.now();
-            window.arFlag = false;
             document.body.focus();
           }, 0);
         }
-        if (window.arFlag) {
-          dataLayer.push({ event: "AR_VCHANGE" });
-        }
       });
 
-      // 注册所有事件监听器
-      window.addEventListener("unload", () => {
-        if (window.arFlag) {
-          dataLayer.push({ event: "AR_UNLOAD" });
+      function HandleMessageTACANDTAR(e) {
+        if (window.done1) {
+          return;
         }
-      });
-
-      window.addEventListener("pagehide", () => {
-        if (window.arFlag) {
-          dataLayer.push({ event: "AR_HIDE" });
+        const activeElement = document.activeElement;
+        const src = activeElement?.getAttribute("src") || "";
+        if (src.includes("afs/ads?")) {
+          if (activeElement.getAttribute("title")) {
+            dataLayer.push({
+              event: "T_AR_NEW"
+            });
+            window.done1 = true;
+          } else {
+            if (window?.ttq?.track) {
+              window.ttq?.track?.("AddToWishlist");
+            } else {
+              window.taskList = window.taskList || [];
+              window.taskList.push("AddToWishlist");
+            }
+            dataLayer.push({ event: "T_AC_MSG" });
+            window.done1 = true;
+          }
         }
-      });
-
-      if (window.navigator.webdriver) {
-        dataLayer.push({ event: "WEB_DRIVER" });
       }
+      //TAC和TAR埋点监听消息
+      window.addEventListener("message", (e) => {
+        if (typeof e?.data === "string" && e?.data?.startsWith("FSXDC,.aCS:")) {
+          HandleMessageTACANDTAR();
+        }
+      });
     </script>
   </body>
 </html>

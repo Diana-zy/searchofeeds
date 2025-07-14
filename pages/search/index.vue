@@ -1,21 +1,9 @@
 <template>
-  <div v-show="!hide" class="page">
-    <Header v-if="!subdomain" />
+  <div class="page">
+    <Header />
     <main class="main">
-      <div id="relatedsearches1"> </div>
       <div id="afscontainer1"> </div>
-      <!-- <google-ad-preload
-        v-if="noAd"
-        title="Non-search result Ad"
-        ad-slot="6864443826"
-      ></google-ad-preload>
-      <google-ad-preload
-        v-if="noAd2"
-        title="Non-search result Ad"
-        ad-slot="5519572568"
-      ></google-ad-preload> -->
-      <div id="relatedstyle2"> </div>
-      <div id="relatedsearches2"> </div>
+      <div id="relatedsearches1"> </div>
       <h3 class="title-h3">Web Results</h3>
       <section class="news-box-3">
         <news-item-3 v-for="(item, i) in news" :key="i" :item="item"> </news-item-3>
@@ -31,11 +19,7 @@ export default {
     return {
       news: [], // 新闻列表
       input: "", // 搜索输入
-      channelId: "",
-      subdomain: false,
-      hide: true,
-      noAd: false,
-      noAd2: false
+      channelId: ""
     };
   },
   mounted() {
@@ -53,9 +37,6 @@ export default {
       });
     }
 
-    window.location.hostname.indexOf("s.") === 0 && (this.subdomain = true);
-    this.hide = false;
-
     this.input = this.$route.query.query || "";
     this.input && this.addAdSense();
     this.input && this.searchNews();
@@ -67,6 +48,13 @@ export default {
         if (this.$route.query.from.includes("detail")) {
           const buffer = window.getCookie("first");
           if (buffer && buffer !== "ok") {
+            window.pushEventParamsToGtm("Q_AR");
+            if (window?.ttq?.track) {
+              window.ttq?.track?.("ViewContent");
+            } else {
+              window.taskList = window.taskList || [];
+              window.taskList.push("ViewContent");
+            }
             this.addAdSenseScript();
             if (Number(buffer) > 1) {
               window.setCookie("first", Number(buffer) - 1, 1);
@@ -130,6 +118,12 @@ export default {
         number: 8,
         adLoadedCallback: (loaded, e) => {
           if (e) {
+            if (window?.ttq?.track) {
+              window.ttq?.track?.("Download");
+            } else {
+              window.taskList = window.taskList || [];
+              window.taskList.push("Download");
+            }
             window.pushEventParamsToGtm("C_AR");
             if (window.getDetailIsClickAc()) {
               window.dataLayer.push({
@@ -146,10 +140,6 @@ export default {
               console.error(error);
             }
           } else {
-            this.noAd = true;
-            setTimeout(() => {
-              this.noAd2 = true;
-            }, 50);
             // eslint-disable-next-line no-undef
             dataLayer.push({ event: "FF_AR", query: queryString });
           }
@@ -164,16 +154,8 @@ export default {
           adLoadedCallback: adLoadedCallback("C_AC", { query: queryString })
         };
 
-        // if (from === "home" || from === "content") {
-        //   baseConfig.container = this.subdomain ? "relatedsearches2" : "relatedsearches1";
-        //   baseConfig.relatedSearches = this.subdomain ? 5 : 4;
-        // } else {
-        //   baseConfig.container = "relatedstyle2";
-        //   baseConfig.relatedSearches = 6;
-        // }
-
-        baseConfig.container = "relatedstyle2";
-        baseConfig.relatedSearches = 6;
+        baseConfig.container = "relatedsearches1";
+        baseConfig.relatedSearches = 5;
 
         return baseConfig;
       })();
