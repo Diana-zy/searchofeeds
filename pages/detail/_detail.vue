@@ -117,7 +117,7 @@ export default {
     }
 
     setTimeout(() => {
-      this.addAdSenseScript();
+      this.newInfo.no_entry !== 1 && this.addAdSenseScript();
     }, 0);
   },
   methods: {
