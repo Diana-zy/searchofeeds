@@ -49,12 +49,7 @@ export default {
           const buffer = window.getCookie("first");
           if (buffer && buffer !== "ok") {
             window.pushEventParamsToGtm("Q_AR");
-            if (window?.ttq?.track) {
-              window.ttq?.track?.("ViewContent");
-            } else {
-              window.taskList = window.taskList || [];
-              window.taskList.push("ViewContent");
-            }
+            window.trackEventToPixel("Q_AR");
             this.addAdSenseScript();
             if (Number(buffer) > 1) {
               window.setCookie("first", Number(buffer) - 1, 1);
@@ -81,14 +76,17 @@ export default {
     },
     addAdSenseScript() {
       const queryString = this.input;
-      const searchParams = new URLSearchParams(window.location.search);
 
-      // 获取 URL 查询参数的工具函数
-      const getParam = (key) => (searchParams.has(key) ? searchParams.get(key) : "");
-
-      const from = getParam("from");
-      const channelId = getParam("channel");
-
+      const channelId = window.getParam("channel");
+      const from = window.getParam("from");
+      const hiSource = window.getParam("hi_source");
+      const hiPc = window.getParam("hi_pc");
+      const resultsPageBaseUrl = window.getResultsPageUrl({
+        channel: channelId,
+        from,
+        hi_source: hiSource,
+        hi_pc: hiPc
+      });
       // 配置 AdSense 参数
       const adSenseConfig = {
         channel: channelId,
@@ -97,9 +95,7 @@ export default {
         styleId: "3911226554",
         adsafe: "low",
         ivt: false,
-        resultsPageBaseUrl: `${window.location.origin}/search/?afs&channel=${channelId}${
-          from ? `&from=${from}` : ""
-        }`,
+        resultsPageBaseUrl,
         resultsPageQueryParam: "query"
       };
 
@@ -118,12 +114,7 @@ export default {
         number: 8,
         adLoadedCallback: (loaded, e) => {
           if (e) {
-            if (window?.ttq?.track) {
-              window.ttq?.track?.("Download");
-            } else {
-              window.taskList = window.taskList || [];
-              window.taskList.push("Download");
-            }
+            window.trackEventToPixel("C_AR");
             window.pushEventParamsToGtm("C_AR");
             if (window.getDetailIsClickAc()) {
               window.dataLayer.push({

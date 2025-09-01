@@ -124,9 +124,14 @@ export default {
     addAdSenseScript() {
       // 获取 URL 查询参数
       const searchParams = new URLSearchParams(window.location.search);
-      const clickId = searchParams.has("click_id") ? searchParams.get("click_id") : "";
       let terms = searchParams.has("terms") ? searchParams.get("terms") : "";
       terms = terms.replace(/[，]/g, ",");
+      // 获取Url携带的headline参数
+      let headline = searchParams.has("headline") ? searchParams.get("headline") : "";
+      if (headline === "{title}" || headline === "{{ad_title}}") {
+        headline = "";
+      }
+
       const paramKeys = [];
       // 遍历查询参数并将其添加到 paramKeys 数组中
       for (const param of searchParams) {
@@ -134,6 +139,15 @@ export default {
       }
       const ignoredPageParams = paramKeys.join(",");
 
+      const channelId = window.getParam("channel");
+      const hiSource = window.getParam("hi_source");
+      const hiPc = window.getParam("hi_pc");
+      const resultsPageBaseUrl = window.getResultsPageUrl({
+        channel: channelId,
+        from: "detail",
+        hi_source: hiSource,
+        hi_pc: hiPc
+      });
       const adSenseConfig = {
         channel: this.channelId,
         pubId: "partner-pub-1853000876464912",
@@ -141,12 +155,10 @@ export default {
         adsafe: "low",
         ignoredPageParams,
         relatedSearchTargeting: "content",
-        resultsPageBaseUrl: `${window.location.origin}/search/?afs&from=detail&channel=${
-          this.channelId
-        }${clickId && `&click_id=${clickId}`}`,
+        resultsPageBaseUrl,
         resultsPageQueryParam: "query",
         terms: terms || this.newInfo.terms,
-        referrerAdCreative: terms || this.newInfo.referrer_ad_creative,
+        referrerAdCreative: headline || terms || this.newInfo.referrer_ad_creative,
         ivt: false,
         adtest: "off"
       };
@@ -157,12 +169,7 @@ export default {
         adLoadedCallback: function (loaded, response, isExperimentVariant, callbackOptions) {
           console.log("adLoadedCallback", loaded, response, isExperimentVariant, callbackOptions);
           if (response) {
-            if (window?.ttq?.track) {
-              window.ttq?.track?.("Lead");
-            } else {
-              window.taskList = window.taskList || [];
-              window.taskList.push("Lead");
-            }
+            window.trackEventToPixel("D_C_AC");
             window.pushEventParamsToGtm("C_AC");
             window.setCookie("query_ad", 1);
             try {
