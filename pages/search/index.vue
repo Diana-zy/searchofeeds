@@ -80,13 +80,24 @@ export default {
       const channelId = window.getParam("channel");
       const from = window.getParam("from");
       const hiSource = window.getParam("hi_source");
-      const hiPc = window.getParam("hi_pc");
+      const hiPc = window.getParam();
       const resultsPageBaseUrl = window.getResultsPageUrl({
         channel: channelId,
         from,
         hi_source: hiSource,
         hi_pc: hiPc
       });
+      const ttclid = window.getParam("ttclid") || window.getCookie('hi_ttclid'); //TikTok
+      const tblci = window.getParam("tblci") || window.getCookie('hi_tblci'); //Taboola
+      const dicbo = window.getParam("dicbo") || window.getCookie('hi_dicbo'); //Outbrain
+      let scid = 'unknown'
+      if(hiSource==='tiktok'){
+        scid = ttclid || 'unknown'
+      } else  if(hiSource==='taboola'){
+        scid = tblci || 'unknown'
+      } else  if(hiSource==='outbrain'){
+        scid = dicbo || 'unknown'
+      }
       // 配置 AdSense 参数
       const adSenseConfig = {
         channel: channelId,
@@ -112,6 +123,7 @@ export default {
       const adblock1 = {
         container: "afscontainer1",
         number: 8,
+        clicktrackUrl:`https://api.tapmygame.com/api/ct/afsct?cid=${channelId}&hi_source=${hiSource}&scid=${scid}&cc=${window.youknowwho_ip_country || 'unknown'}&site_id=searchofeeds`,
         adLoadedCallback: (loaded, e) => {
           if (e) {
             window.trackEventToPixel("C_AR");
