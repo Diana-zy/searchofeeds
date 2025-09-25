@@ -31,12 +31,27 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3BPZNSBTDE"></script>
     <script>
+      function legacyUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          const r = Math.random() * 16 | 0;
+          const v = c === 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        });
+      }
+      let uuid =  window.getCookie('hi_user_id')
+      if(!uuid){
+        uuid = legacyUUID().replace(/-/g, "")
+        window.setCookie('hi_user_id',uuid)
+      }
       window.dataLayer = window.dataLayer || [];
+      gtag('set','user_properties',{
+        'user_id_1':uuid
+      })
       function gtag() {
         dataLayer.push(arguments);
       }
-      gtag("js", new Date());
 
+      gtag("js", new Date());
       gtag("config", "G-3BPZNSBTDE");
     </script>
     <!-- Google Tag Manager -->
