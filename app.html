@@ -6,6 +6,7 @@
     {{ HEAD }}
     <script src="/trackEvent.js"></script>
     <script src="/linkMarking.js"></script>
+    <script src="/dataMonitor.js"></script>
     <script>
       const searchParams = new URLSearchParams(window.location.search);
       const ttclid = searchParams.get("ttclid");//TikTok
@@ -20,17 +21,37 @@
       script.src = "https://wc.bunchthings.com/youknowwho.js?" + Date.now();
       document.head.appendChild(script);
       script.onload = function () {
-        window.dataLayer.push({
-          event: "Page_View_Ip",
+        pushEventToGTM('Page_View_Ip',{
           hi_ip: window.youknowwho_ip || "unknown",
           hi_country: window.youknowwho_ip_country || "unknown"
-        });
+        })
+        // window.dataLayer.push({
+        //   event: "Page_View_Ip",
+        //   hi_ip: window.youknowwho_ip || "unknown",
+        //   hi_country: window.youknowwho_ip_country || "unknown"
+        // });
       };
     </script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3BPZNSBTDE"></script>
     <script>
+      // function legacyUUID() {
+      //   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      //     const r = Math.random() * 16 | 0;
+      //     const v = c === 'x' ? r : (r & 0x3 | 0x8);
+      //     return v.toString(16);
+      //   });
+      // }
+      // let uuid =  window.getCookie('hi_user_id')
+      // if(!uuid){
+      //   uuid = legacyUUID().replace(/-/g, "")
+      //   window.setCookie('hi_user_id',uuid)
+      // }
+      window.dataLayer = window.dataLayer || [];
+      // gtag('set','user_properties',{
+      //   'user_id_1':uuid
+      // })
       function legacyUUID() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
           const r = Math.random() * 16 | 0;
@@ -43,9 +64,9 @@
         uuid = legacyUUID().replace(/-/g, "")
         window.setCookie('hi_user_id',uuid)
       }
-      window.dataLayer = window.dataLayer || [];
       gtag('set','user_properties',{
-        'user_id_1':uuid
+        'hi_user_id':uuid,
+        'hi_channel_user':getValueByURLOrCookie('channel')
       })
       function gtag() {
         dataLayer.push(arguments);
@@ -53,6 +74,70 @@
 
       gtag("js", new Date());
       gtag("config", "G-3BPZNSBTDE");
+      //拦截fetch
+      (function () {
+        const { fetch: originalFetch } = window;
+        window.fetch = async (...args) => {
+          let [resource, config] = args;
+          // console.log(args,'args');
+          if(resource.includes('https://www.google-analytics.com/g/collect')){
+            if(!resource.includes("up.hi_user_id="+uuid)){
+              resource = resource + "&up.hi_user_id="+uuid
+            }
+            if(!resource.includes("up.hi_channel_user="+getValueByURLOrCookie('channel'))){
+              resource = resource + "&up.hi_channel_user="+getValueByURLOrCookie('channel')
+            }
+          }
+          // 发送请求
+          return await originalFetch(resource, config);
+        };
+      })()
+    </script>
+    <script>
+      //Detail_pv_user
+      (function () {
+        const { pathname } = window.location
+        const hi_source = getValueByURLOrCookie('hi_source')
+        const {hi_source_clid} = getInfoBySource(hi_source)
+        if(pathname.includes('/detail')){
+          window.setCookieTomorrow('detail_time',new Date().getTime())
+          const detailPvUser = window.getCookie('detailPvUser')
+          if(detailPvUser){
+            let buffer = {}
+            try {
+              buffer = JSON.parse(detailPvUser)
+              if(!buffer[hi_source_clid]){
+                buffer[hi_source_clid] = {
+                  isPush:true,
+                  time:new Date().getTime()
+                }
+                //两次clid无点击逻辑按子渠道存
+                if(!buffer[getHostname()+'_isPushGtm']){
+                  if(buffer[getHostname()+'_first']){
+                    if(!buffer[getHostname()+'_second'] && buffer[getHostname()+'_first'] !==hi_source_clid){
+                      buffer[getHostname()+'_second'] = hi_source_clid
+                    }
+                  } else {
+                    buffer[getHostname()+'_first'] = hi_source_clid
+                  }
+                }
+                pushEventToGTM('Detail_pv_user')
+                setCookieTomorrow('detailPvUser',JSON.stringify(buffer))
+              }
+            }catch (e) {}
+          } else {
+            let buffer = {}
+            buffer[hi_source_clid]={
+              isPush:true,
+              time:new Date().getTime()
+            }
+            buffer[getHostname()+'_first'] = hi_source_clid
+            pushEventToGTM('Detail_pv_user')
+            setCookieTomorrow('detailPvUser',JSON.stringify(buffer))
+
+          }
+        }
+      })()
     </script>
     <!-- Google Tag Manager -->
     <script>
@@ -123,9 +208,18 @@
           if (src.includes("afs/ads?")) {
             if (activeElement.getAttribute("title")) {
               window.trackEventToPixel("T_AR");
-              window.pushEventParamsToGtm("T_AR");
+              // window.pushEventParamsToGtm("T_AR");
+              const searchParams = new URLSearchParams(window.location.search);
+              const ttclid = searchParams.get("ttclid");
+              pushEventToGTM('T_AR',{
+                hi_country: window.youknowwho_ip_country || "unknown",
+                hi_ip: window.youknowwho_ip || "unknown",
+                hi_ttclid: ttclid || window.getCookie("hi_ttclid") || "unknown"
+              })
+              handleDataMonitor()
             } else {
               window.pushEventParamsToGtm("T_AC");
+              TACChangeCookie()
               if (window.location.pathname.startsWith("/detail")) {
                 window.setCookie("click_ad", 1);
               }
@@ -180,7 +274,7 @@
             window.done1 = true;
           } else {
             window.trackEventToPixel("T_AC_MSG");
-            dataLayer.push({ event: "T_AC_MSG" });
+            dataLayer.push({ event: "T_AC_MSG" ,hi_time:handleTACMSGToLoad()});
             window.done1 = true;
           }
         }
