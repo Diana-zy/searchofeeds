@@ -216,6 +216,9 @@ function trackEventToPixel(eventKey) {
       window._tfa.push({ notify: "event", name: eventName, id: pixelId });
     } else if (source === "tiktok") {
       window.ttq?.instance(pixelId)?.track?.(eventName);
+      if (eventName === "Purchase") {
+        window.ttq?.instance(pixelId)?.track?.("InitiateCheckout");
+      }
     } else if (source === "outbrain") {
       window.obApi?.("track", eventName);
     } else if (source === "pinterest") {
