@@ -47,44 +47,68 @@ function getInfoBySource(source) {
     return{
       hi_source_clid,
       hi_source_aid,
-      hi_source_site:'unknown'
+      hi_source_site:'unknown',
+      hi_source_site_name:'unknown',
+      hi_section_id:'unknown',
+      hi_section_name:'unknown',
     }
   } else if(source ==='taboola'){
     let hi_source_clid = getValueByURLOrCookie('tblci')
     let hi_source_aid = getValueByURLOrCookie('campaign_id')
     let hi_source_site = getValueByURLOrCookie('site_id')
+    let hi_source_site_name = getValueByURLOrCookie('site_name')
+    // let hi_section_id = getValueByURLOrCookie('section_id')
+    // let hi_section_name = getValueByURLOrCookie('section_name')
     return{
       hi_source_clid,
       hi_source_aid,
-      hi_source_site
+      hi_source_site,
+      hi_source_site_name,
+      hi_section_id:'unknown',
+      hi_section_name:'unknown',
     }
   }else if(source ==='outbrain'){
     let hi_source_clid = getValueByURLOrCookie('dicbo')
     let hi_source_aid = getValueByURLOrCookie('campaign_id')
     let hi_source_site = getValueByURLOrCookie('site_id')
+    let hi_source_site_name = getValueByURLOrCookie('site_name')
+    let hi_section_id = getValueByURLOrCookie('section_id')
+    let hi_section_name = getValueByURLOrCookie('section_name')
     return{
       hi_source_clid,
       hi_source_aid,
-      hi_source_site
+      hi_source_site,
+      hi_source_site_name,
+      hi_section_id,
+      hi_section_name,
     }
   }else if(source ==='pinterest'){
     return{
       hi_source_clid:'unknown',
       hi_source_aid:'unknown',
-      hi_source_site:'unknown'
+      hi_source_site:'unknown',
+      hi_source_site_name:'unknown',
+      hi_section_id:'unknown',
+      hi_section_name:'unknown',
     }
   }else if(source ==='facebook'){
     let hi_source_clid = getValueByURLOrCookie('fbclid')
     return{
       hi_source_clid,
       hi_source_aid:'unknown',
-      hi_source_site:'unknown'
+      hi_source_site:'unknown',
+      hi_source_site_name:'unknown',
+      hi_section_id:'unknown',
+      hi_section_name:'unknown',
     }
   } else {
     return{
       hi_source_clid:'unknown',
       hi_source_aid:'unknown',
-      hi_source_site:'unknown'
+      hi_source_site:'unknown',
+      hi_source_site_name:'unknown',
+      hi_section_id:'unknown',
+      hi_section_name:'unknown',
     }
   }
 }
