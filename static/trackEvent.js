@@ -202,7 +202,7 @@ function trackEventToPixel(eventKey) {
     T_AR: {
       taboola: "make_purchase",
       tiktok: "Purchase",
-      outbrain: "Purchase",
+      outbrain: "Registration",
       pinterest: "checkout",
       facebook: "Purchase"
     }
