@@ -93,27 +93,38 @@ export default {
 @media screen and (max-width: 750px) {
   .news-style-2 {
     padding-right: 0;
+    padding-bottom: vw(32);
+    border-bottom: vw(2) solid #ececee;
     width: 100%;
     .img {
       width: 100%;
       height: auto;
       object-fit: cover;
-      border-radius: 0;
+      border-radius: vw(16);
       margin-right: 0;
     }
     .category {
       font-size: vw(24);
       line-height: vw(44);
       padding: vw(8) vw(16);
-      border-radius: 0;
-      margin: vw(24) 0 vw(24);
+      border-radius: vw(4);
+      margin: vw(16) 0 vw(16);
     }
     .title {
-      font-size: vw(36);
-      line-height: vw(48);
-      min-height: vw(96);
-      margin-bottom: vw(26);
-      @include ellipsis(2);
+      font-size: vw(26);
+      line-height: vw(36);
+      height: vw(108);
+      font-weight: normal;
+      margin-bottom: 0;
+      @include ellipsis(3);
+    }
+    .news-author {
+      display: flex;
+      gap: vw(12);
+      font-size: vw(22);
+      font-weight: 300;
+      margin: vw(6) 0 0;
+      @include author-icon(vw(22), vw(22));
     }
   }
 }
