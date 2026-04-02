@@ -1,17 +1,19 @@
 <template>
   <CustomLink class="news-style-2" :to="`/${item.path_v2 || item.path}/`">
-    <NuxtImg
-      format="auto"
-      fit="inside"
-      width="658"
-      height="440"
-      :src="item.cover"
-      :alt="item.cover_seo_alt || item.name"
-      :loading="index === 0 ? 'eager' : 'lazy'"
-      :preload="index === 0"
-      :fetchpriority="index === 0 ? 'high' : 'low'"
-      class="img"
-    />
+    <div class="img-wrap">
+      <NuxtImg
+        format="auto"
+        fit="inside"
+        width="658"
+        height="440"
+        :src="item.cover"
+        :alt="item.cover_seo_alt || item.name"
+        :loading="index === 0 ? 'eager' : 'lazy'"
+        :preload="index === 0"
+        :fetchpriority="index === 0 ? 'high' : 'low'"
+        class="img"
+      />
+    </div>
     <p class="category btn-tag" v-if="item.seo_category_name || item.category_locale_name">{{
       capitalizeFirstLetter(item.seo_category_name || item.category_locale_name)
     }}</p>
@@ -46,11 +48,14 @@ export default {
 <style lang="scss" scoped>
 .news-style-2 {
   padding-right: 16px;
+  .img-wrap {
+    border-radius: 8px;
+    overflow: hidden;
+  }
   .img {
     width: 100%;
     height: auto;
-    object-fit: cover;
-    border-radius: 8px 8px 8px 8px;
+    display: block;
   }
   .category {
     display: inline-block;
@@ -89,12 +94,13 @@ export default {
   .news-style-2 {
     padding-right: 0;
     width: 100%;
+    .img-wrap {
+      border-radius: vw(16);
+    }
     .img {
       width: 100%;
       height: auto;
-      object-fit: cover;
-      border-radius: vw(16);
-      margin-right: 0;
+      display: block;
     }
     .category {
       font-size: vw(24);
