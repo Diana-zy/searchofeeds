@@ -87,7 +87,7 @@ import { processHtmlWithToc, generateNestedToc } from "../../utils/cheerio-toc.j
 export default {
   components: { Breadcrumb },
   async asyncData({ $axios, params, env }) {
-    const slug = params.detail;
+    const slug = params.slug;
     const lastDashIndex = slug.lastIndexOf("-");
     const id = slug.substring(lastDashIndex + 1, slug.length);
 
@@ -237,7 +237,7 @@ export default {
         {
           hid: "og:url",
           property: "og:url",
-          content: `https://searchofeeds.com/detail/${this.newInfo && this.newInfo.path}/`
+          content: `https://searchofeeds.com/${this.newInfo && this.newInfo.path_v2}/`
         },
         {
           hid: "og:locale",
@@ -258,7 +258,7 @@ export default {
       link: [
         {
           rel: "canonical",
-          href: `https://searchofeeds.com/detail/${this.newInfo && this.newInfo.path}/`
+          href: `https://searchofeeds.com/${this.newInfo && this.newInfo.path_v2}/`
         }
       ]
     };

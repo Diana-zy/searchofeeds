@@ -1,7 +1,7 @@
 <template>
-  <CustomLink class="news-style-3" :to="`/detail/${item.path}/`">
+  <CustomLink class="news-style-3" :to="`/${item.path_v2 || item.path}/`">
     <p class="title">{{ item.name }}</p>
-    <p class="path">/detail/{{ item.path }}/</p>
+    <p class="path">/{{ item.path_v2 || item.path }}/</p>
     <p class="desc">{{ item.first_paragraph }}</p>
   </CustomLink>
 </template>

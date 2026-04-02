@@ -1,5 +1,5 @@
 <template>
-  <CustomLink class="item" :to="`/detail/${item.path || item.path_v2}/`">
+  <CustomLink class="item" :to="`/${item.path_v2 || item.path}/`">
     <p class="title">{{ item.name }}</p>
     <p class="path">{{ formattedPath }}</p>
     <p class="desc">{{ item.first_paragraph }}</p>
@@ -17,9 +17,9 @@ export default {
   computed: {
     formattedPath() {
       if (process.client) {
-        return `${window.location.origin}/detail/${this.item.path || this.item.path_v2}/`;
+        return `${window.location.origin}/${this.item.path_v2 || this.item.path}/`;
       }
-      return `/detail/${this.item.path || this.item.path_v2}/`;
+      return `/${this.item.path_v2 || this.item.path}/`;
     }
   }
 };

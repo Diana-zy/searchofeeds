@@ -1,5 +1,5 @@
 <template>
-  <CustomLink class="news-style-2" :to="`/detail/${item.path || item.path_v2}/`">
+  <CustomLink class="news-style-2" :to="`/${item.path_v2 || item.path}/`">
     <NuxtImg
       format="auto"
       fit="cover"
@@ -77,12 +77,7 @@ export default {
     }
   }
   .news-author {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 13px;
-    font-size: 14px;
-    padding-bottom: 16px;
-    @include author-icon(25px, 25px);
+    display: none;
   }
 }
 @media screen and (max-width: 1100px) {
@@ -103,18 +98,25 @@ export default {
     }
     .category {
       font-size: vw(24);
-      line-height: vw(44);
-      padding: vw(8) vw(16);
-      border-radius: 0;
-      margin: vw(24) 0 vw(24);
+      line-height: vw(40);
+      padding: vw(4) vw(8);
+      border-radius: vw(8);
+      margin: vw(12) 0;
     }
     .title {
       font-size: vw(26);
-      line-height: vw(48);
+      line-height: vw(36);
       font-weight: normal;
-      min-height: vw(96);
-      margin-bottom: vw(26);
-      @include ellipsis(2);
+      height: vw(108);
+      @include ellipsis(3);
+    }
+    .news-author {
+      display: flex;
+      gap: vw(12);
+      font-size: vw(22);
+      font-weight: 300;
+      margin: vw(6) 0 0;
+      @include author-icon(vw(22), vw(22));
     }
   }
 }

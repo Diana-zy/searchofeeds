@@ -1,5 +1,5 @@
 <template>
-  <CustomLink class="swiper-rec" :to="`/detail/${item.path || item.path_v2}/`">
+  <CustomLink class="swiper-rec" :to="`/${item.path_v2 || item.path}/`">
     <div class="swiper-rec-img">
       <NuxtImg
         format="auto"
