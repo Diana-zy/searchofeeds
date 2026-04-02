@@ -1,41 +1,39 @@
 <template>
-  <CustomLink class="news-style-4" :to="`/detail/${item.path}/`">
+  <CustomLink class="news-style-4" :to="`/detail/${item.path || item.path_v2}/`">
     <NuxtImg
       format="auto"
       fit="cover"
-      width="328"
-      height="218"
+      width="658"
+      height="440"
       :src="item.cover"
-      :alt="item.name"
-      loading="lazy"
-      class="img m-hidden-block"
+      :alt="item.cover_seo_alt || item.name"
+      :loading="index === 0 ? 'eager' : 'lazy'"
+      :preload="index === 0"
+      :fetchpriority="index === 0 ? 'high' : 'low'"
+      class="img"
     />
-    <NuxtImg
-      format="auto"
-      fit="cover"
-      width="196"
-      height="196"
-      :src="item.cover"
-      :alt="item.name"
-      loading="lazy"
-      class="img pc-hidden-block"
-    />
-    <p class="category">{{ capitalizeFirstLetter(item.seo_category_name || item.category_locale_name || item.category_name) }}</p>
+    <p class="category btn-tag" v-if="item.seo_category_name || item.category_locale_name || item.category_name">{{
+      capitalizeFirstLetter(item.seo_category_name || item.category_locale_name || item.category_name)
+    }}</p>
     <p class="title">{{ item.name }}</p>
-    <p class="desc">
-      {{ item.first_paragraph }}
-    </p>
+    <div class="news-author">
+      <div>{{ item.author && item.author.name }}</div>
+      <div>{{ item.updated_at }}</div>
+    </div>
   </CustomLink>
 </template>
 
 <script>
 import { capitalizeFirstLetter } from "~/utils/utils";
-
 export default {
   props: {
     item: {
       type: Object,
       required: true
+    },
+    index: {
+      type: Number,
+      default: 0
     }
   },
 
@@ -47,94 +45,82 @@ export default {
 
 <style lang="scss" scoped>
 .news-style-4 {
-  position: relative;
-  padding-left: 344px;
-  margin-bottom: 24px;
-  height: 243px;
-  &::after {
-    content: "";
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: calc(100% - 344px);
-    height: 1px;
-    background: rgba($font1, 0.1);
-  }
+  padding-right: 16px;
   .img {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 328px;
-    height: 218px;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
     border-radius: 8px 8px 8px 8px;
   }
   .category {
     display: inline-block;
-    padding: 0 4px;
-    height: 20px;
-    line-height: 20px;
-    font-size: 12px;
-    font-family: "rssb";
-    color: $color1;
-    background: rgba($color1, 0.2);
+    padding: 4px 8px;
+    line-height: 18px;
+    font-size: 13px;
+    font-family: "hem";
+    color: $font5;
+    background: $tagColor3;
     border-radius: 4px 4px 4px 4px;
-    margin: 8px 0;
+    margin: 16px 0 10px;
   }
   .title {
-    font-size: 20px;
-    font-family: "rssb";
-    line-height: 28px;
-    font-weight: 700;
-    margin-bottom: 16px;
-    @include ellipsis(2);
-  }
-  .desc {
-    color: rgba($font1, 0.6);
-    line-height: 26px;
-    @include ellipsis(5);
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: bold;
+    @include ellipsis(3);
+    transition: color 0.2s;
   }
   &:hover {
     .title {
-      // color: $color1;
+      color: $color1;
       text-decoration: underline;
     }
+  }
+  .news-author {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 13px;
+    font-size: 14px;
+    padding-bottom: 16px;
+    @include author-icon(25px, 25px);
+  }
+}
+@media screen and (max-width: 1100px) {
+  .news-style-4 {
+    width: 100%;
   }
 }
 @media screen and (max-width: 750px) {
   .news-style-4 {
-    padding-left: vw(212);
-    margin-bottom: vw(32);
-    height: vw(234);
-    &::after {
-      width: calc(100% - vw(212));
-      height: vw(2);
-    }
+    padding-right: 0;
+    padding-bottom: vw(32);
+    border-bottom: vw(2) solid #ececee;
     .img {
-      width: vw(196);
-      height: vw(196);
+      width: 100%;
+      height: auto;
       border-radius: vw(16);
     }
     .category {
-      padding: 0 vw(8);
-      height: vw(40);
-      line-height: vw(40);
       font-size: vw(24);
-      border-radius: vw(8);
-      margin: 0 0 vw(8);
+      line-height: vw(44);
+      padding: vw(8) vw(16);
+      border-radius: 0;
+      margin: vw(24) 0 vw(24);
     }
     .title {
-      font-size: vw(36);
-      line-height: vw(50);
-      margin-bottom: 0;
+      font-size: vw(26);
+      line-height: vw(36);
+      font-weight: normal;
+      height: vw(108);
       @include ellipsis(3);
     }
-    .desc {
-      display: none;
-    }
-    &:hover {
-      .title {
-        color: $color1;
-      }
+    .news-author {
+      display: flex;
+      gap: vw(12);
+      font-size: vw(22);
+      font-weight: 300;
+      margin: vw(6) 0 0;
+      @include author-icon(vw(22), vw(22));
     }
   }
 }

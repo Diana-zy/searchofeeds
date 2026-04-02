@@ -73,21 +73,23 @@ export default {
             params: {
               site_id: env.SITE_ID
             }
-          })
+          }).catch(() => null)
         ]);
       let category = [];
-      await categoryResponse.list.map(async (item) => {
-        category.push(
-          $axios.$get("/api/article/get_seo_category_page", {
-            params: {
-              site_id: env.SITE_ID,
-              seo_category_id: item.id,
-              size: 4,
-              page: 1
-            }
-          })
-        );
-      });
+      if (categoryResponse && categoryResponse.list) {
+        categoryResponse.list.map((item) => {
+          category.push(
+            $axios.$get("/api/article/get_seo_category_page", {
+              params: {
+                site_id: env.SITE_ID,
+                seo_category_id: item.id,
+                size: 4,
+                page: 1
+              }
+            })
+          );
+        });
+      }
       let list = await Promise.all(category);
       return {
         recNews: recNewsResponse,
