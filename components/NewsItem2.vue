@@ -56,6 +56,7 @@ export default {
     width: 100%;
     height: auto;
     display: block;
+    border-radius: 8px;
   }
   .category {
     display: inline-block;
@@ -96,11 +97,13 @@ export default {
     width: 100%;
     .img-wrap {
       border-radius: vw(16);
+      overflow: hidden;
     }
     .img {
       width: 100%;
       height: auto;
       display: block;
+      border-radius: vw(16);
     }
     .category {
       font-size: vw(24);
