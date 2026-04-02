@@ -20,7 +20,7 @@
       loading="lazy"
       class="img pc-hidden-block"
     />
-    <p class="category">{{ capitalizeFirstLetter(item.category_name) }}</p>
+    <p class="category">{{ capitalizeFirstLetter(item.seo_category_name || item.category_locale_name || item.category_name) }}</p>
     <p class="title">{{ item.name }}</p>
     <p class="desc">
       {{ item.first_paragraph }}
