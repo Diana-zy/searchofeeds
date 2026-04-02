@@ -98,7 +98,7 @@ export default {
       width: 100%;
       height: auto;
       object-fit: cover;
-      border-radius: 0;
+      border-radius: vw(16);
       margin-right: 0;
     }
     .category {
@@ -109,8 +109,9 @@ export default {
       margin: vw(24) 0 vw(24);
     }
     .title {
-      font-size: vw(36);
+      font-size: vw(26);
       line-height: vw(48);
+      font-weight: normal;
       min-height: vw(96);
       margin-bottom: vw(26);
       @include ellipsis(2);
