@@ -2,7 +2,7 @@
   <CustomLink class="news-style-2" :to="`/${item.path_v2 || item.path}/`">
     <NuxtImg
       format="auto"
-      fit="cover"
+      fit="inside"
       width="658"
       height="440"
       :src="item.cover"
