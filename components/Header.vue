@@ -162,21 +162,23 @@ export default {
     width: 100%;
     height: 66px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 4px;
     .logo {
       display: block;
       width: 265px;
       height: 40px;
       @include bg("logo.png");
-      margin-right: 56px;
+      margin-right: 0;
     }
     .site-h1 {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 400;
-      color: rgba($font1, 0.5);
+      color: rgba($font1, 0.45);
       white-space: nowrap;
-      line-height: 1.2;
+      line-height: 1;
     }
   }
 }
@@ -278,9 +280,9 @@ export default {
     z-index: 11;
     .header-top {
       height: auto;
-      justify-content: center;
       flex-direction: column;
       align-items: flex-start;
+      justify-content: center;
       gap: vw(4);
       .logo {
         width: vw(320);
@@ -292,11 +294,11 @@ export default {
         font-size: vw(20);
         font-weight: 400;
         color: rgba($font1, 0.45);
-        max-width: vw(400);
+        max-width: vw(460);
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        line-height: 1.2;
+        line-height: 1;
       }
     }
   }
