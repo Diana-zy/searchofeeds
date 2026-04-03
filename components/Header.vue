@@ -174,7 +174,7 @@ export default {
       margin-right: 0;
     }
     .site-h1 {
-      font-size: 11px;
+      font-size: 11px !important;
       font-weight: 700;
       color: $font1;
       white-space: nowrap;
@@ -291,7 +291,7 @@ export default {
         margin-right: 0;
       }
       .site-h1 {
-        font-size: 14px;
+        font-size: 14px !important;
         font-weight: 700;
         color: $font1;
         max-width: vw(460);
