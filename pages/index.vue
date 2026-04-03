@@ -1,7 +1,7 @@
 <template>
   <div class="page home-page">
     <Header />
-    <h1 style="display: none">Searchofeeds - Global News &amp; Information</h1>
+    <h1 class="page-title">Searchofeeds - Global News &amp; Information</h1>
     <main class="main">
       <div class="layout-left">
         <section v-swiper:mySwiper="swiperOption" class="swiper-box">
@@ -135,6 +135,13 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.page-title {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 24px 0 16px;
+  color: $font1;
+}
 .main {
   padding-bottom: 32px;
   border-bottom: 1px solid #ececee;
@@ -203,6 +210,10 @@ export default {
   gap: 24px;
 }
 @media screen and (max-width: 750px) {
+  .page-title {
+    font-size: vw(36);
+    margin: vw(32) 0 vw(24);
+  }
   .main {
     padding-bottom: vw(32);
     border-bottom: none;

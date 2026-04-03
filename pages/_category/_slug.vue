@@ -260,6 +260,44 @@ export default {
           rel: "canonical",
           href: `https://searchofeeds.com/${this.newInfo && this.newInfo.path_v2}/`
         }
+      ],
+      script: [
+        {
+          type: "application/ld+json",
+          json: {
+            "@context": "https://schema.org",
+            "@type": "NewsArticle",
+            "headline": this.newInfo && this.newInfo.name,
+            "description": this.newInfo && this.newInfo.seo_desc,
+            "image": [
+              {
+                "@type": "ImageObject",
+                "url": `https://bunchthings.com/cdn-cgi/image/w=600,f=auto,fit=cover/${this.newInfo && this.newInfo.cover}`,
+                "width": 600
+              }
+            ],
+            "datePublished": this.newInfo && this.newInfo.updated_at,
+            "dateModified": this.newInfo && this.newInfo.updated_at,
+            "author": [
+              {
+                "@type": "Person",
+                "name": this.newInfo && this.newInfo.author && this.newInfo.author.name
+              }
+            ],
+            "publisher": {
+              "@type": "Organization",
+              "name": "Searchofeeds",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.searchofeeds.com/logo.png"
+              }
+            },
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": `https://searchofeeds.com/${this.newInfo && this.newInfo.path_v2}/`
+            }
+          }
+        }
       ]
     };
   },

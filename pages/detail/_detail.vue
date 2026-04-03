@@ -86,7 +86,7 @@ import { processHtmlWithToc, generateNestedToc } from "../../utils/cheerio-toc.j
 
 export default {
   components: { Breadcrumb },
-  async asyncData({ $axios, params, env }) {
+  async asyncData({ $axios, params, env, redirect, query }) {
     const slug = params.detail;
     const lastDashIndex = slug.lastIndexOf("-");
     const id = slug.substring(lastDashIndex + 1, slug.length);
@@ -101,6 +101,14 @@ export default {
             related_num: 3
           }
         });
+        // 301 redirect to SEO URL /{category}/{slug}/
+        if (data && data.path_v2) {
+          const qs = Object.keys(query || {}).length
+            ? "?" + new URLSearchParams(query).toString()
+            : "";
+          redirect(301, `/${data.path_v2}/${qs}`);
+          return {};
+        }
       } catch (detailError) {
         console.error(`Failed to fetch detail for ID ${id}:`, detailError);
         return {
