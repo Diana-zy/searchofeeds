@@ -2,6 +2,7 @@
   <header class="header">
     <div class="header-top">
       <CustomLink to="/" class="logo"></CustomLink>
+      <h1 v-if="pageTitle" class="site-h1">{{ pageTitle }}</h1>
       <div class="search-box m-hidden-block">
         <input v-model="input" placeholder="Search..." class="search" @keyup.enter="search" />
         <i v-show="input != ''" class="icon-clear" @click="clear"></i>
@@ -66,6 +67,10 @@ export default {
     categories: {
       type: Array,
       default: () => []
+    },
+    pageTitle: {
+      type: String,
+      default: ""
     }
   },
   data() {
@@ -166,6 +171,13 @@ export default {
       @include bg("logo.png");
       margin-right: 56px;
     }
+    .site-h1 {
+      font-size: 13px;
+      font-weight: 400;
+      color: rgba($font1, 0.5);
+      white-space: nowrap;
+      line-height: 1.2;
+    }
   }
 }
 .menu {
@@ -265,13 +277,26 @@ export default {
     border-bottom: vw(2) solid rgba($font3, 0.35);
     z-index: 11;
     .header-top {
-      height: 100%;
-      justify-content: start;
+      height: auto;
+      justify-content: center;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: vw(4);
       .logo {
         width: vw(320);
         height: vw(48);
         @include bg("logo.png");
         margin-right: 0;
+      }
+      .site-h1 {
+        font-size: vw(20);
+        font-weight: 400;
+        color: rgba($font1, 0.45);
+        max-width: vw(400);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        line-height: 1.2;
       }
     }
   }
