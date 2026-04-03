@@ -1,6 +1,6 @@
 <template>
   <div class="page home-page">
-    <Header page-title="Searchofeeds - Global News &amp; Information" />
+    <Header page-title="Global News &amp; Information" />
     <main class="main">
       <div class="layout-left">
         <section v-swiper:mySwiper="swiperOption" class="swiper-box">
