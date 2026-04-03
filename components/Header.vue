@@ -291,7 +291,7 @@ export default {
         margin-right: 0;
       }
       .site-h1 {
-        font-size: vw(18);
+        font-size: vw(16);
         font-weight: 700;
         color: $font1;
         max-width: vw(460);
