@@ -20,8 +20,14 @@ export default {
       const path = await pathData.json();
       const categoryPaths = path.data.category.map((item) => `/category/${item}/`);
       const detailPaths = path.data.detail.map((item) => `/detail/${item}/`);
-      const urls = [...categoryPaths, ...detailPaths];
-      return urls;
+
+      const pathV2Data = await fetch(
+        `${process.env.PROD_API_URL}/api/article/get_all_path_v2?site_id=${process.env.SITE_ID}`
+      );
+      const pathV2 = await pathV2Data.json();
+      const slugPaths = (pathV2.data.detail || []).map((item) => `/${item}/`);
+
+      return [...categoryPaths, ...detailPaths, ...slugPaths];
     }
   },
   axios: {
