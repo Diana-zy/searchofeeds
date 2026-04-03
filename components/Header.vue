@@ -174,9 +174,9 @@ export default {
       margin-right: 0;
     }
     .site-h1 {
-      font-size: 12px;
-      font-weight: 400;
-      color: rgba($font1, 0.45);
+      font-size: 11px;
+      font-weight: 700;
+      color: $font1;
       white-space: nowrap;
       line-height: 1;
     }
@@ -291,9 +291,9 @@ export default {
         margin-right: 0;
       }
       .site-h1 {
-        font-size: vw(20);
-        font-weight: 400;
-        color: rgba($font1, 0.45);
+        font-size: vw(18);
+        font-weight: 700;
+        color: $font1;
         max-width: vw(460);
         overflow: hidden;
         white-space: nowrap;
