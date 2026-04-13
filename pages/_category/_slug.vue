@@ -22,7 +22,6 @@
               <p class="summary-text">{{ newInfo.seo_desc }}</p>
             </div>
 
-            <div id="relatedsearches1"> </div>
             <aside class="toc-container" v-if="toc.length">
               <h3 class="toc-title">Table of Contents</h3>
               <nav class="toc-nav">
@@ -38,6 +37,7 @@
                 </ul>
               </nav>
             </aside>
+            <div id="relatedsearches1"> </div>
             <NuxtImg
               format="auto"
               fit="cover"
