@@ -14,12 +14,12 @@ export default {
     concurrency: 10,
     interval: 100,
     async routes() {
-      const pathData = await fetch(
-        `${process.env.PROD_API_URL}/api/article/get_all_path?site_id=${process.env.SITE_ID}`
+      // 获取所有SEO分类用于生成分类页面
+      const seoCategoryData = await fetch(
+        `${process.env.PROD_API_URL}/api/article/get_all_seo_category?site_id=${process.env.SITE_ID}`
       );
-      const path = await pathData.json();
-      const categoryPaths = path.data.category.map((item) => `/category/${item}/`);
-      const detailPaths = path.data.detail.map((item) => `/detail/${item}/`);
+      const seoCategories = await seoCategoryData.json();
+      const categoryPaths = (seoCategories.data?.list || []).map((item) => `/category/${item.path}/`);
 
       const pathV2Data = await fetch(
         `${process.env.PROD_API_URL}/api/article/get_all_path_v2?site_id=${process.env.SITE_ID}`
@@ -27,7 +27,7 @@ export default {
       const pathV2 = await pathV2Data.json();
       const slugPaths = (pathV2.data.detail || []).map((item) => `/${item}/`);
 
-      return [...categoryPaths, ...detailPaths, ...slugPaths];
+      return [...categoryPaths, ...slugPaths];
     }
   },
   axios: {
