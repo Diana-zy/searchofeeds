@@ -94,14 +94,17 @@ export default {
     }
   },
   head() {
-    const categoryName = (this.categoryInfo && this.categoryInfo.seo_category && this.categoryInfo.seo_category.name) || "";
+    const category = this.categoryInfo && this.categoryInfo.seo_category;
+    const categoryName = (category && category.name) || "";
+    const seoTitle = (category && category.seo_title) || `${categoryName} - Searchofeeds`;
+    const seoDesc = (category && category.seo_desc) || `Browse the latest ${categoryName} articles on Searchofeeds.`;
     return {
-      title: `${categoryName} - Searchofeeds`,
+      title: seoTitle,
       meta: [
         {
           hid: "description",
           name: "description",
-          content: `Browse the latest ${categoryName} articles on Searchofeeds.`
+          content: seoDesc
         }
       ],
       script: [
