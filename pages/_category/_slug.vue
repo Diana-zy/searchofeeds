@@ -86,8 +86,8 @@ import { processHtmlWithToc, generateNestedToc } from "../../utils/cheerio-toc.j
 
 export default {
   components: { Breadcrumb },
-  async asyncData({ $axios, params, env, redirect, query }) {
-    const slug = params.detail;
+  async asyncData({ $axios, params, env }) {
+    const slug = params.slug;
     const lastDashIndex = slug.lastIndexOf("-");
     const id = slug.substring(lastDashIndex + 1, slug.length);
 
@@ -101,14 +101,6 @@ export default {
             related_num: 3
           }
         });
-        // 301 redirect to SEO URL /{category}/{slug}/
-        if (data && data.path_v2) {
-          const qs = Object.keys(query || {}).length
-            ? "?" + new URLSearchParams(query).toString()
-            : "";
-          redirect(301, `/${data.path_v2}/${qs}`);
-          return {};
-        }
       } catch (detailError) {
         console.error(`Failed to fetch detail for ID ${id}:`, detailError);
         return {
@@ -245,7 +237,7 @@ export default {
         {
           hid: "og:url",
           property: "og:url",
-          content: `https://searchofeeds.com/detail/${this.newInfo && this.newInfo.path}/`
+          content: `https://searchofeeds.com/${this.newInfo && this.newInfo.path_v2}/`
         },
         {
           hid: "og:locale",
@@ -266,7 +258,45 @@ export default {
       link: [
         {
           rel: "canonical",
-          href: `https://searchofeeds.com/detail/${this.newInfo && this.newInfo.path}/`
+          href: `https://searchofeeds.com/${this.newInfo && this.newInfo.path_v2}/`
+        }
+      ],
+      script: [
+        {
+          type: "application/ld+json",
+          json: {
+            "@context": "https://schema.org",
+            "@type": "NewsArticle",
+            "headline": this.newInfo && this.newInfo.name,
+            "description": this.newInfo && this.newInfo.seo_desc,
+            "image": [
+              {
+                "@type": "ImageObject",
+                "url": `https://bunchthings.com/cdn-cgi/image/w=600,f=auto,fit=cover/${this.newInfo && this.newInfo.cover}`,
+                "width": 600
+              }
+            ],
+            "datePublished": this.newInfo && this.newInfo.updated_at,
+            "dateModified": this.newInfo && this.newInfo.updated_at,
+            "author": [
+              {
+                "@type": "Person",
+                "name": this.newInfo && this.newInfo.author && this.newInfo.author.name
+              }
+            ],
+            "publisher": {
+              "@type": "Organization",
+              "name": "Searchofeeds",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.searchofeeds.com/logo.png"
+              }
+            },
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": `https://searchofeeds.com/${this.newInfo && this.newInfo.path_v2}/`
+            }
+          }
         }
       ]
     };

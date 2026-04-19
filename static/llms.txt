@@ -1,0 +1,63 @@
+# Searchofeeds - LLM Crawler Guide
+
+## Site Overview
+
+Searchofeeds is a global news aggregation platform delivering the latest developments across multiple topics:
+
+- Politics: International and domestic political news
+- Economy: Financial markets, business, and economic trends
+- Technology: IT, AI, science, and innovation
+- Culture: Arts, entertainment, and lifestyle
+- Sports: Global sports coverage and updates
+
+## Site Structure
+
+### Main Categories
+- Politics: Breaking political news and analysis
+- Economy: Markets, business, and financial news
+- Technology: Tech industry, gadgets, and digital trends
+- Culture: Entertainment, arts, and lifestyle features
+- Sports: Sports events, results, and athlete news
+
+### Article Format
+Each article includes:
+- Title: SEO-optimized headline
+- Meta Description: Up to 160 characters
+- Related Questions: 3-5 FAQ entries
+- Body Content: HTML format with structured data
+- Related Articles: Curated recommendations
+
+## Content Principles
+
+1. **Accuracy**: All information is verified and sourced from credible outlets
+2. **Timeliness**: Coverage of the latest global developments
+3. **Clarity**: Written for a broad international audience
+4. **Objectivity**: Multiple perspectives presented without bias
+
+## Crawlable Paths
+
+```
+/                   - Homepage
+/category/*         - Category listing pages
+/detail/*           - Article detail pages (legacy URL)
+/{category}/*       - Article detail pages (SEO URL)
+/sitemap.xml        - Sitemap
+```
+
+## Blocked Paths
+
+```
+/admin/*            - Admin panel
+/api/*              - API endpoints
+/cdn-cgi/*          - CDN resources
+/search/*           - Search results pages
+```
+
+## Contact
+
+Website: https://www.searchofeeds.com
+
+---
+
+*This file is intended for AI/LLM crawlers to understand the site structure and content.*
+*Last updated: 2026-04-03*
