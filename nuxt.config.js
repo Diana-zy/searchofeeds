@@ -30,6 +30,29 @@ export default {
       return [...categoryPaths, ...slugPaths];
     }
   },
+  hooks: {
+    'generate:done'(generator) {
+      const nodePath = require('path')
+      const fs = require('fs')
+      const hostname = 'https://searchofeeds.com'
+      const today = new Date().toISOString().split('T')[0]
+      const routes = [...generator.generatedRoutes].filter(
+        (r) => r && typeof r === 'string' && !r.includes(':')
+      )
+      const urlEntries = routes
+        .map((r) =>
+          `  <url>\n    <loc>${hostname}${r}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`
+        )
+        .join('\n')
+      const xml =
+        `<?xml version="1.0" encoding="UTF-8"?>\n` +
+        `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+        urlEntries +
+        `\n</urlset>`
+      const outputPath = nodePath.join(generator.options.generate.dir, 'sitemap.xml')
+      fs.writeFileSync(outputPath, xml, 'utf8')
+    }
+  },
   axios: {
     baseURL:
       process.env.NODE_ENV === "production" ? process.env.PROD_API_URL : process.env.TEST_API_URL
@@ -90,15 +113,12 @@ export default {
     "~/plugins/nav-data"
   ],
   components: true,
-  buildModules: ["@nuxtjs/style-resources", "@nuxt/image", "@nuxtjs/pwa", "@nuxtjs/sitemap"],
+  buildModules: ["@nuxtjs/style-resources", "@nuxt/image", "@nuxtjs/pwa"],
   css: ["@/assets/css/fonts.css", "@/assets/css/reset.css", "@/assets/css/common.scss"],
   styleResources: {
     scss: ["~/assets/css/_mixins.scss"]
   },
   modules: ["@nuxtjs/axios"],
-  sitemap: {
-    hostname: "https://searchofeeds.com/"
-  },
   pwa: {
     manifest: {
       name: "Searchofeeds",
@@ -108,7 +128,7 @@ export default {
     },
     icon: {
       src: "static/icon.png",
-      sizes: [32, 64, 120, 144, 152, 192, 512] // 自定义生成的图标尺寸
+      sizes: [32, 64, 120, 144, 152, 192, 512]
     }
   },
   build: {
