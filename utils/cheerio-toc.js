@@ -39,6 +39,14 @@ exports.processHtmlWithToc = (html, levels = [1, 2, 3]) => {
     });
   });
 
+  // 包裹表格，使其支持横向滚动
+  $("table").each((i, el) => {
+    const $el = $(el);
+    if (!$el.parent().hasClass("table-scroll-wrapper")) {
+      $el.wrap('<div class="table-scroll-wrapper"></div>');
+    }
+  });
+
   // 按页面中标题出现顺序排序
   toc.sort((a, b) => {
     // 先按层级，再按出现位置
