@@ -19,7 +19,8 @@ export default {
       );
       const path = await pathData.json();
       const categoryPaths = path.data.category.map((item) => `/category/${item}/`);
-      const detailPaths = path.data.detail.map((item) => `/detail/${item}/`);
+      // detail items are in "category/slug" format, generate as /:category/:slug/
+      const detailPaths = path.data.detail.map((item) => `/${item}/`);
       const urls = [...categoryPaths, ...detailPaths];
       return urls;
     }
